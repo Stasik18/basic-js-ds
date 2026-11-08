@@ -39,33 +39,65 @@ class BinarySearchTree {
   }
 
   find(data, node = this._root) {
-    const cirrentNode = node;
+    const currentNode = node;
 
-    if (cirrentNode === null) return null;
+    if (currentNode === null) return null;
 
-    if (cirrentNode.data === data) return cirrentNode;
-    if (cirrentNode.data < data) return this.find(data, cirrentNode.right);
-    if (cirrentNode.data > data) return this.find(data, cirrentNode.left);
+    if (currentNode.data === data) return currentNode;
+    if (currentNode.data < data) return this.find(data, currentNode.right);
+    if (currentNode.data > data) return this.find(data, currentNode.left);
   }
 
-  has(/* data */) {
-    // Remove line below and write your code here
-    throw new NotImplementedError("Not implemented");
+  has(data) {
+    return Boolean(this.find(data));
   }
 
-  remove(/* data */) {
-    // Remove line below and write your code here
-    throw new NotImplementedError("Not implemented");
+  remove(data) {
+    this._root = this._removeNode(this._root, data);
   }
 
-  min() {
-    // Remove line below and write your code here
-    throw new NotImplementedError("Not implemented");
+  _removeNode(node, data) {
+    if (node === null) return null;
+
+    if (data < node.data) {
+      node.left = this._removeNode(node.left, data);
+    } else if (data > node.data) {
+      node.right = this._removeNode(node.right, data);
+    } else {
+      if (node.left === null) return node.right;
+
+      if (node.right === null) return node.left;
+
+      let successor = node.right;
+
+      while (successor.left !== null) {
+        successor = successor.left;
+      }
+
+      node.data = successor.data;
+
+      node.right = this._removeNode(node.right, successor.data);
+    }
+
+    return node;
   }
 
-  max() {
-    // Remove line below and write your code here
-    throw new NotImplementedError("Not implemented");
+  min(node = this._root) {
+    const currentNode = node;
+
+    if (currentNode === null) return null;
+    if (currentNode.left === null) return currentNode.data;
+
+    return this.min(currentNode.left);
+  }
+
+  max(node = this._root) {
+    const currentNode = node;
+
+    if (currentNode === null) return null;
+    if (currentNode.right === null) return currentNode.data;
+
+    return this.max(currentNode.right);
   }
 }
 
